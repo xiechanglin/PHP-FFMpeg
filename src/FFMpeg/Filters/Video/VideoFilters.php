@@ -120,9 +120,9 @@ class VideoFilters extends AudioFilters
      *
      * @return VideoFilters
      */
-    public function pad(Dimension $dimension)
+    public function pad(Dimension $dimension, Point $point)
     {
-        $this->media->addFilter(new PadFilter($dimension));
+        $this->media->addFilter(new PadFilter($dimension, $point));
 
         return $this;
     }
