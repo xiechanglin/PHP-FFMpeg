@@ -24,7 +24,7 @@ use Neutron\TemporaryFilesystem\Manager as FsManager;
 
 class VVideo extends Video
 {
-    private $inputFile = '';
+    private $inputFile = [];
     /**
      * Opens a file in order to be processed.
      *
@@ -34,10 +34,12 @@ class VVideo extends Video
      *
      * @throws InvalidArgumentException
      */
-    public function addInputFile($pathfile)
+    public function addInputFile(array $pathfile)
     {
-        if (null === $streams = $this->ffprobe->streams($pathfile)) {
-            throw new RuntimeException(sprintf('Unable to probe "%s".', $pathfile));
+        foreach ($pathfile as $file) {
+            if (null === $streams = $this->ffprobe->streams($file)) {
+                throw new RuntimeException(sprintf('Unable to probe "%s".', $file));
+            }
         }
         $this->inputFile = $pathfile;
         return $this;
@@ -66,8 +68,10 @@ class VVideo extends Video
     public function save(FormatInterface $format, $outputPathfile)
     {
         $commands = array('-y', '-i', $this->pathfile);
-        if($this->inputFile){
-            $commands = array_merge($commands,['-i', $this->inputFile]);
+        if($files = $this->getInputFile()){
+            foreach ($files as $file) {
+                $commands = array_merge($commands,['-i', $file]);
+            }
         }
 
         $filters = clone $this->filters;
