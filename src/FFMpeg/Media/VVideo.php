@@ -25,6 +25,9 @@ use Neutron\TemporaryFilesystem\Manager as FsManager;
 class VVideo extends Video
 {
     private $inputFile = [];
+
+    private $addCommands= [];
+
     /**
      * Opens a file in order to be processed.
      *
@@ -53,6 +56,34 @@ class VVideo extends Video
     public function getInputFile()
     {
         return $this->inputFile;
+    }
+
+    /**
+     * add new command in order to be processed.
+     *
+     * @param array $command one command
+     *
+     * @return Audio|Video
+     *
+     * @throws InvalidArgumentException
+     */
+    public function addCommand(array $command)
+    {
+        if (empty($command)) {
+            throw new RuntimeException(sprintf('Empty "%s".', 'command'));
+        }
+        $this->addCommands[] = $command;
+        return $this;
+    }
+
+    /**
+     * return add commands  
+     *
+     * @return array
+     **/
+    public function getAddCommands()
+    {
+        return $this->addCommands;
     }
 
     /**
@@ -93,6 +124,12 @@ class VVideo extends Video
 
         foreach ($filters as $filter) {
             $commands = array_merge($commands, $filter->apply($this, $format));
+        }
+
+        if ($addCommands = $this->getAddCommands()) {
+            foreach ($addCommands as $addCommand) {
+                $commands = array_merge($commands, $addCommand);
+            }
         }
 
         if ($format instanceof VideoInterface) {
