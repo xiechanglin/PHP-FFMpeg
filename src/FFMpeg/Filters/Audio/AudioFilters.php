@@ -71,4 +71,30 @@ class AudioFilters
 
         return $this;
     }
+
+    /**
+     * Cuts the audio at `$start`, optionally define the end
+     *
+     * @param   TimeCode    $start      Where the clipping starts(seek to time)
+     * @param   TimeCode    $duration   How long the clipped audio should be
+     * @return AudioFilters
+     */
+    public function mix($count) {
+        $this->media->addFilter(new AudioMixFilter($count));
+
+        return $this;
+    }
+    /**
+     * Cuts the audio at `$start`, optionally define the end
+     *
+     * @param   TimeCode    $start      Where the clipping starts(seek to time)
+     * @param   TimeCode    $duration   How long the clipped audio should be
+     * @return AudioFilters
+     */
+    public function complex($complex) {
+        $this->media->addFilter(new ComplexFilter($complex));
+
+        return $this;
+    }
+
 }
