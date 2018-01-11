@@ -164,7 +164,7 @@ class VAudio extends Audio
     {
         $listeners = null;
 
-        $commands = array('-f', 'concat', '-i', $filename);
+        $commands = array('-f', 'concat','-safe', '0', '-i', $filename);
 
         if (null !== $format->getAudioKiloBitrate()) {
             $commands[] = '-b:a';
