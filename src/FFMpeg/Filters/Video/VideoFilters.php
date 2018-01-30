@@ -175,4 +175,17 @@ class VideoFilters extends AudioFilters
 
         return $this;
     }
+    /**
+     * Applies a custom filter: -filter_complex foo bar
+     *
+     * @param string    $parameters
+     *
+     * @return VideoFilters
+     */
+    public function complex($parameters)
+    {
+        $this->media->addFilter(new ComplexFilter($parameters));
+
+        return $this;
+    }
 }
