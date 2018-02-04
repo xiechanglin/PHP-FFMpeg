@@ -114,10 +114,12 @@ class ExtractMultipleFramesFilter implements VideoFilterInterface
             else
                 $nbDigitsInFileNames = "06";
 
+            $nbDigitsInFileNames = '05';
+
             // Set the parameters
             $commands[] = '-vf';
             $commands[] = 'fps=' . $this->frameRate;
-            $commands[] = $this->destinationFolder . 'frame-%'.$nbDigitsInFileNames.'d.jpg';
+            $commands[] = $this->destinationFolder . '%'.$nbDigitsInFileNames.'d.jpg';
         }
         catch (RuntimeException $e) {
             throw new RuntimeException('An error occured while extracting the frames: ' . $e->getMessage() . '. The code: ' . $e->getCode());

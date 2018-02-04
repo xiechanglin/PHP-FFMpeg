@@ -343,4 +343,46 @@ class VVideo extends Video
     {
         return new Concat($sources, $this->driver, $this->ffprobe);
     }
+
+    /**
+     * Exports the video in the desired format, applies registered filters.
+     *
+     * @param FormatInterface   $format
+     * @param string            $outputPathfile
+     * @return Video
+     * @throws RuntimeException
+     */
+    public function imageToVideo( $path, $bgm, $outputFile)
+    {
+        $failure = null;
+
+        try {
+            $commands[] = '-r';
+            $commands[] = '24';
+            $commands[] = '-f';
+            $commands[] = 'image2';
+            $commands[] = '-i';
+            $commands[] = $path;
+            $commands[] = '-i';
+            $commands[] = $bgm;
+            $commands[] = '-vcodec';
+            $commands[] = 'libx264';
+            $commands[] = '-crf';
+            $commands[] = '25';
+            $commands[] = '-pix_fmt';
+            $commands[] = 'yuv420p';
+            $commands[] = $outputFile;
+            /** add listeners here */
+            $listeners = null;
+            $this->driver->command($commands, false, $listeners);
+        } catch (ExecutionFailureException $e) {
+            $failure = $e;
+        }
+
+        if (null !== $failure) {
+            throw new RuntimeException('Encoding failed', $failure->getCode(), $failure);
+        }
+
+        return $this;
+    }
 }

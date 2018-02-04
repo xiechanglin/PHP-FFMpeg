@@ -15,7 +15,7 @@ use Alchemy\BinaryDriver\ConfigurationInterface;
 use FFMpeg\Driver\FFMpegDriver;
 use FFMpeg\Exception\InvalidArgumentException;
 use FFMpeg\Exception\RuntimeException;
-use FFMpeg\Media\Audio;
+use FFMpeg\Media\VAudio;
 use FFMpeg\Media\VVideo;
 use Psr\Log\LoggerInterface;
 
@@ -40,7 +40,7 @@ class VFFMpeg extends FFMpeg
         if (0 < count($streams->videos())) {
             return new VVideo($pathfile, $this->driver, $this->ffprobe);
         } elseif (0 < count($streams->audios())) {
-            return new Audio($pathfile, $this->driver, $this->ffprobe);
+            return new VAudio($pathfile, $this->driver, $this->ffprobe);
         }
 
         throw new InvalidArgumentException('Unable to detect file format, only audio and video supported');
